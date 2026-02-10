@@ -27,7 +27,7 @@ Examples:
   
   # v2.0+ 高级功能
   $0 list --search "关键字"                          # 关键字搜索
-  $0 complete --title "任务名" --time "15:00"        # 时间消歧
+  $0 complete --title "任务名" --match-time "15:00"  # 时间消歧
   $0 update --title "旧名" --name "新名" --force     # 强制覆盖
 EOF
     exit 1

@@ -8,7 +8,7 @@ check_jq
 
 # --- Defaults ---
 ID="" TITLE="" LIST=""
-DATE="" TIME=""
+MATCH_DATE="" MATCH_TIME=""
 
 # --- Parse Args ---
 while [ $# -gt 0 ]; do
@@ -16,8 +16,8 @@ while [ $# -gt 0 ]; do
         --id) ID="$2"; shift 2 ;;
         --title) TITLE="$2"; shift 2 ;;
         --list) LIST="$2"; shift 2 ;;
-        --date) DATE="$2"; shift 2 ;;
-        --time) TIME="$2"; shift 2 ;;
+        --match-date|--date) MATCH_DATE="$2"; shift 2 ;; # --date 作为兼容别名
+        --match-time|--time) MATCH_TIME="$2"; shift 2 ;; # --time 作为兼容别名
         *) json_error "complete" "未知选项: $1" ;;
     esac
 done
@@ -56,7 +56,7 @@ tell application "Reminders"
             end if
         end repeat
         repeat with r in matchedReminders
-            if my dateMatches(due date of r, "$DATE", "$TIME") or ("$DATE" is "" and "$TIME" is "") then
+            if my dateMatches(due date of r, "$MATCH_DATE", "$MATCH_TIME") or ("$MATCH_DATE" is "" and "$MATCH_TIME" is "") then
                 set output to output & my reminderLine(r, listName) & LF
             end if
         end repeat
@@ -77,8 +77,8 @@ EOF
     fi
 
     if [ "$count" -eq 0 ]; then
-        jq -n --arg a "complete" --arg r "not_found_by_title" --arg t "$TITLE" --arg l "$LIST" --arg d "$DATE" --arg ti "$TIME" \
-          '{status:"error",action:$a,reason:$r,title:$t,list:(if $l == "" then null else $l end),date:$d,time:$ti,message:"No reminder found matching title and criteria"}'
+        jq -n --arg a "complete" --arg r "not_found_by_title" --arg t "$TITLE" --arg l "$LIST" --arg d "$MATCH_DATE" --arg ti "$MATCH_TIME" \
+          '{status:"error",action:$a,reason:$r,title:$t,list:(if $l == "" then null else $l end),match_date:$d,match_time:$ti,message:"No reminder found matching title and criteria"}'
         exit 1
     elif [ "$count" -gt 1 ]; then
         candidates=$(echo "$lines" | reminder_lines_to_array)
