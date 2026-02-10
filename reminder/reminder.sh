@@ -20,9 +20,15 @@ Actions:
   cleanup   Cleanup completed reminders (optionally by list)
 
 Examples:
+  # 基础操作
   $0 create --name "Buy Milk" --date 2026-02-15 --time 18:00
   $0 list --completed false
   $0 lists
+  
+  # v2.0+ 高级功能
+  $0 list --search "关键字"                          # 关键字搜索
+  $0 complete --title "任务名" --time "15:00"        # 时间消歧
+  $0 update --title "旧名" --name "新名" --force     # 强制覆盖
 EOF
     exit 1
 }
