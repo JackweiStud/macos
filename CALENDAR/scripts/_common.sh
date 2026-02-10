@@ -129,7 +129,8 @@ ASHELP
 events_to_json() {
     local action="$1"
     jq -R 'split("\t") | {uid:.[0],title:.[1],start:.[2],end:.[3],calendar:.[4],location:(.[5]//""),notes:(.[6]//""),allday:(.[7]=="true")}' \
-    | jq -s --arg a "$action" '{status:"success",action:$a,count:length,events:.}'
+    | jq -s --arg a "$action" \
+      'sort_by(.start) | {status:"success",action:$a,count:length,events:.}'
 }
 
 event_to_json() {

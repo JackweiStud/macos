@@ -127,8 +127,10 @@ ASHELP
 # --- Parse tab-separated reminder line(s) to JSON ---
 reminders_to_json() {
     local action="$1"
-    jq -R 'split("\t") | {id:.[0],name:.[1],due_date:(.[2]//null),list:.[3],notes:(.[4]//""),completed:(.[5]=="true")}' \
-    | jq -s --arg a "$action" '{status:"success",action:$a,count:length,reminders:.}'
+    jq -R 'split("\t") | {id:.[0],name:.[1],due_date:(.[2]//""),list:.[3],notes:(.[4]//""),completed:(.[5]=="true")}' \
+    | jq -s --arg a "$action" \
+      'sort_by(if .due_date == "" then "9999-12-31" else .due_date end) 
+       | {status:"success",action:$a,count:length,reminders:.}'
 }
 
 reminder_to_json() {
