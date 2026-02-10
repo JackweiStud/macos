@@ -48,7 +48,13 @@ tell application "Reminders"
     set output to ""
     repeat with theList in listQueue
         set listName to name of theList
-        set matchedReminders to (every reminder of theList whose name is "$ES_TITLE")
+        set allReminders to every reminder of theList
+        set matchedReminders to {}
+        repeat with r in allReminders
+            if my nameMatches(name of r, "$ES_TITLE") then
+                set end of matchedReminders to r
+            end if
+        end repeat
         repeat with r in matchedReminders
             if my dateMatches(due date of r, "$DATE", "$TIME") or ("$DATE" is "" and "$TIME" is "") then
                 set output to output & my reminderLine(r, listName) & LF

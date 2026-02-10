@@ -46,4 +46,4 @@ if [ $? -ne 0 ]; then
     json_error "cleanup" "$result"
 fi
 
-json_success "cleanup" "成功清理了 $result 条已完成的任务"
+jq -n --arg a "cleanup" --arg c "$result" '{status:"success",action:$a,count:($c|tonumber),message:"成功清理了 \($c) 条已完成的任务"}'

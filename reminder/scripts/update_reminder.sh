@@ -58,7 +58,13 @@ tell application "Reminders"
     set output to ""
     repeat with theList in listQueue
         set listName to name of theList
-        set matchedReminders to (every reminder of theList whose name is "$ES_TITLE")
+        set allReminders to every reminder of theList
+        set matchedReminders to {}
+        repeat with r in allReminders
+            if my nameMatches(name of r, "$ES_TITLE") then
+                set end of matchedReminders to r
+            end if
+        end repeat
         repeat with r in matchedReminders
             if my dateMatches(due date of r, "$MATCH_DATE", "$MATCH_TIME") or ("$MATCH_DATE" is "" and "$MATCH_TIME" is "") then
                 set output to output & my reminderLine(r, listName) & LF
@@ -103,7 +109,19 @@ tell application "Reminders"
     else
         set targetList to list "$ES_LIST"
     end if
-    set collisions to (every reminder of targetList whose name is "$ES_NAME")
+    set allReminders to every reminder of targetList
+    set collisions to {}
+    repeat with r in allReminders
+        tell application "Reminders"
+            set rName to name of r
+        end tell
+        -- 使用简单的小写比较进行碰撞检测
+        set lowerName to do shell script "echo " & quoted form of rName & " | tr '[:upper:]' '[:lower:]'"
+        set lowerTarget to do shell script "echo " & quoted form of "$ES_NAME" & " | tr '[:upper:]' '[:lower:]'"
+        if lowerName is lowerTarget then
+            set end of collisions to r
+        end if
+    end repeat
     
     -- If force mode, delete all existing reminders with target name
     if "$FORCE" is "true" then

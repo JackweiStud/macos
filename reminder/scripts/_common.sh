@@ -99,13 +99,20 @@ on cleanText(t)
     if t is missing value then return ""
     set t to t as text
     set oldD to AppleScript's text item delimiters
+    -- Replace tabs with spaces
     set AppleScript's text item delimiters to tab
     set parts to text items of t
     set AppleScript's text item delimiters to " "
     set t to parts as text
+    -- Replace returns with spaces
     set AppleScript's text item delimiters to return
     set parts to text items of t
+    set AppleScript's text item delimiters to " "
+    set t to parts as text
+    -- Replace linefeeds with spaces
     set AppleScript's text item delimiters to linefeed
+    set parts to text items of t
+    set AppleScript's text item delimiters to " "
     set t to parts as text
     set AppleScript's text item delimiters to oldD
     return t
@@ -131,6 +138,33 @@ on dateMatches(d, dateStr, timeStr)
     
     return (matchDate and matchTime)
 end dateMatches
+
+on nameMatches(actualName, searchName)
+    set lowerActual to my toLowerCase(actualName)
+    set lowerSearch to my toLowerCase(searchName)
+    return lowerActual is lowerSearch
+end nameMatches
+
+on toLowerCase(str)
+    set lowerStr to ""
+    set upperChars to "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    set lowerChars to "abcdefghijklmnopqrstuvwxyz"
+    repeat with c in (characters of str)
+        set foundPos to 0
+        repeat with i from 1 to (count of upperChars)
+            if c as text is (character i of upperChars) then
+                set foundPos to i
+                exit repeat
+            end if
+        end repeat
+        if foundPos > 0 then
+            set lowerStr to lowerStr & (character foundPos of lowerChars)
+        else
+            set lowerStr to lowerStr & c
+        end if
+    end repeat
+    return lowerStr
+end toLowerCase
 
 on reminderLine(r, listName)
     tell application "Reminders"

@@ -33,6 +33,12 @@ ES_NOTES=$(escape_as "$NOTES")
 # Date handling
 DATE_BLOCK=""
 PROPERTIES="{name:\"$ES_NAME\"}"
+
+# 🆕 隐式今日日期：如果仅提供时间，自动使用今天的日期
+if [ -n "$TIME" ] && [ -z "$DATE" ]; then
+    DATE=$(date +%Y-%m-%d)
+fi
+
 if [ -n "$DATE" ]; then
     validate_date "$DATE" || json_error "create" "Invalid date format: $DATE (expected YYYY-MM-DD)"
     [ -z "$TIME" ] && TIME="09:00" # Default morning time for reminders
