@@ -54,19 +54,25 @@
 
 ### 4. 标记完成 (LLM 核心功能)
 ```bash
-# 需要使用任务的唯一 ID (x-apple-reminder://...)
+# 用 ID（推荐）
 ./reminder.sh complete --id "x-apple-reminder://C7176868..."
+# 或用标题（可选限定清单，若同名多条会返回 candidates 让你确认）
+./reminder.sh complete --title "提交周报" [--list "工作"]
 ```
 
 ### 5. 更新提醒
 ```bash
 # 更新任务标题和时间
 ./reminder.sh update --id "x-apple-reminder://..." --name "提交月报" --date 2026-02-28 --time 10:00
+# 或按标题更新（同名多条会返回 candidates）
+./reminder.sh update --title "提交周报" --date 2026-02-28 --time 10:00 [--list "工作"]
 ```
 
 ### 6. 删除提醒
 ```bash
 ./reminder.sh delete --id "x-apple-reminder://..."
+# 或按标题删除（同名多条会返回 candidates）
+./reminder.sh delete --title "提交周报" [--list "工作"]
 ```
 
 ### 7. 清理已完成

@@ -14,6 +14,10 @@ Actions:
   create    Create a new reminder
   list      List reminders (defaults to uncompleted)
   lists     List available reminder lists
+  complete  Mark a reminder as completed (by --id or --title [--list])
+  delete    Delete a reminder (by --id or --title [--list])
+  update    Update a reminder (by --id or --title [--list])
+  cleanup   Cleanup completed reminders (optionally by list)
 
 Examples:
   $0 create --name "Buy Milk" --date 2026-02-15 --time 18:00

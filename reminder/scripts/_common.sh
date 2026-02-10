@@ -33,6 +33,12 @@ json_success() {
     jq -n --arg a "$action" --arg m "$message" '{status:"success",action:$a,message:$m}'
 }
 
+# --- Convert tab-separated reminder lines to array JSON (for error payloads) ---
+reminder_lines_to_array() {
+    # Reads stdin lines: id \t name \t due_date \t list \t notes \t completed
+    jq -R 'select(length>0) | split("\t") | {id:.[0],name:.[1],due_date:(.[2]//""),list:.[3],notes:(.[4]//""),completed:(.[5]=="true")}' | jq -s '.'
+}
+
 # --- Input Validation ---
 validate_date() {
     [[ "$1" =~ ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$ ]]
