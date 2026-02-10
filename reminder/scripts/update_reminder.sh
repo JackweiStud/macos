@@ -94,9 +94,9 @@ EOF
     ID=$(echo "$lines" | head -n 1 | cut -f1)
 fi
 
-# --- Collision Check: If updating name, check if target name already exists ---
-if [ -n "$NAME" ] && [ "$FORCE" != "true" ]; then
-    collision_check=$(osascript 2>&1 << EOF
+# --- Collision Check & Overwrite: If updating name, handle duplicates ---
+if [ -n "$NAME" ]; then
+    collision_result=$(osascript 2>&1 << EOF
 tell application "Reminders"
     if "$ID" is not "" then
         set targetList to container of (first reminder whose id is "$ID")
@@ -104,15 +104,29 @@ tell application "Reminders"
         set targetList to list "$ES_LIST"
     end if
     set collisions to (every reminder of targetList whose name is "$ES_NAME")
-    return count of collisions
+    
+    -- If force mode, delete all existing reminders with target name
+    if "$FORCE" is "true" then
+        repeat with r in collisions
+            delete r
+        end repeat
+        return "deleted:" & (count of collisions)
+    else
+        return "count:" & (count of collisions)
+    end if
 end tell
 EOF
 )
-    if [ "$collision_check" -gt 0 ]; then
-        jq -n --arg a "update" --arg n "$NAME" --arg l "$LIST" \
-          '{status:"error",action:$a,reason:"collision",name:$n,message:"目标名称已在该清单中存在。请使用不同的名称，或通过 --force 强制更新。"}'
-        exit 1
+    
+    if [[ "$collision_result" == count:* ]]; then
+        collision_count="${collision_result#count:}"
+        if [ "$collision_count" -gt 0 ]; then
+            jq -n --arg a "update" --arg n "$NAME" --arg l "$LIST" \
+              '{status:"error",action:$a,reason:"collision",name:$n,message:"目标名称已在该清单中存在。请使用不同的名称，或通过 --force 强制覆盖删除。"}'
+            exit 1
+        fi
     fi
+    # If force mode, collision_result will be "deleted:N" - continue to update
 fi
 
 UPDATE_BLOCK=""

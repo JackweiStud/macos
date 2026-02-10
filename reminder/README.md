@@ -8,12 +8,16 @@
 *   **自动化友好**：纯命令行设计，支持 JSON 输出，可轻松集成到 Raycast、Alfred、快捷指令或 Shell 脚本中。
 *   **原生集成**：直接读写 macOS 系统级提醒事项数据库，数据全设备同步。
 *   **LLM 友好**：专为大语言模型（LLM）设计，支持通过唯一 ID 进行精准的闭环管理（完成、更新、删除）。
+*   **🆕 智能消歧**：支持多维度匹配（标题+时间），即使存在重名任务也能精准操作，无需频繁查询 ID。
+*   **🆕 安全检查**：自动检测重名冲突，防止误操作覆盖已有任务。
 
 ## ⚠️ 解决的问题
 
 1.  **GUI 干扰**：工作时为了记录一个小任务切换到应用容易打断心流。
 2.  **批量操作难**：原生应用不支持通过脚本批量清理已完成任务或筛选特定任务。
 3.  **信息不透明**：很难从系统中快速导出结构化的 JSON 数据供 AI 分析。
+4.  **🆕 重名歧义**：当存在同名任务时，传统工具强制要求 ID 操作，增加 LLM 交互轮次和 Token 消耗。
+5.  **🆕 意外覆盖**：更新任务名时可能无意中与已有任务重名，导致数据混乱。
 
 ### 没有这个工具怎么解决？
 *   **手动操作**：打开提醒事项 App -> 找到列表 -> 点击新建 -> 填写日期时间，步骤繁琐。
@@ -37,7 +41,7 @@
 ./reminder.sh create --name "提交周报" --date 2026-02-20 --time 17:00 --list "工作" --notes "包含本周数据"
 ```
 
-### 3. 查询提醒 (支持时序排列)
+### 3. 查询提醒 (支持时序排列 + 关键字搜索)
 ```bash
 # 查询所有未完成提醒（默认按时间从近到远排序）
 ./reminder.sh list
@@ -48,31 +52,55 @@
 # 查询已完成的任务
 ./reminder.sh list --completed true
 
-# 查询未完成的任务
-./reminder.sh list --completed false
+# 🆕 关键字搜索（减少 Token 浪费）
+./reminder.sh list --search "买酒"
 ```
 
-### 4. 标记完成 (LLM 核心功能)
+### 4. 标记完成 (支持多维度消歧)
 ```bash
 # 用 ID（推荐）
 ./reminder.sh complete --id "x-apple-reminder://C7176868..."
-# 或用标题（可选限定清单，若同名多条会返回 candidates 让你确认）
+
+# 用标题（若同名多条会返回 candidates 让你确认）
 ./reminder.sh complete --title "提交周报" [--list "工作"]
+
+# 🆕 多维度消歧：通过标题+时间精准定位（避免 ID 查询）
+./reminder.sh complete --title "去领快递" --time "15:00"
+./reminder.sh complete --title "去领快递" --date "2026-02-11" --time "15:00"
 ```
 
-### 5. 更新提醒
+### 5. 更新提醒 (支持重名检测 + 多维度消歧)
 ```bash
-# 更新任务标题和时间
+# 用 ID 更新
 ./reminder.sh update --id "x-apple-reminder://..." --name "提交月报" --date 2026-02-28 --time 10:00
-# 或按标题更新（同名多条会返回 candidates）
+
+# 用标题更新（同名多条会返回 candidates）
 ./reminder.sh update --title "提交周报" --date 2026-02-28 --time 10:00 [--list "工作"]
+
+# 🆕 多维度消歧：通过标题+时间精准定位
+./reminder.sh update --title "去领快递" --match-time "15:00" --name "领取海鲜"
+./reminder.sh update --title "去领快递" --match-date "2026-02-11" --match-time "15:00" --name "领取海鲜"
+
+# 🆕 重名碰撞检测：尝试改名为已存在的名称会被拦截
+./reminder.sh update --title "去领快递" --name "去超市买酒"
+# ❌ 返回错误: {"status":"error","reason":"collision"...}
+
+# 强制覆盖（使用 --force）：先删除所有同名任务，再执行更新
+./reminder.sh update --title "去领快递" --name "去超市买酒" --force
+# ✅ 结果：原有的"去超市买酒"被删除，"去领快递"被改名为"去超市买酒"
 ```
 
-### 6. 删除提醒
+### 6. 删除提醒 (支持多维度消歧)
 ```bash
+# 用 ID 删除
 ./reminder.sh delete --id "x-apple-reminder://..."
-# 或按标题删除（同名多条会返回 candidates）
+
+# 用标题删除（同名多条会返回 candidates）
 ./reminder.sh delete --title "提交周报" [--list "工作"]
+
+# 🆕 多维度消歧：通过标题+时间精准删除
+./reminder.sh delete --title "去领快递" --time "15:00"
+./reminder.sh delete --title "去领快递" --date "2026-02-11" --time "15:00"
 ```
 
 ### 7. 清理已完成
@@ -84,7 +112,39 @@
 ./reminder.sh cleanup --list "购物"
 ```
 
-## 🏗️ 技术实现
+## � 鲁棒性增强 (v2.0 新特性)
+
+为了让 CLI 工具更适合 LLM 自动化场景，我们实现了以下关键增强：
+
+### 1. 关键字搜索 (`--search`)
+在 AppleScript 层直接过滤任务，避免全量拉取浪费 Token。
+```bash
+./reminder.sh list --search "买酒"
+```
+
+### 2. 多维度消歧
+当存在同名任务时，无需频繁查询 ID，直接通过时间维度精准定位：
+- **完成任务**: `--date` / `--time`
+- **更新任务**: `--match-date` / `--match-time` (用于定位) + `--date` / `--time` (用于修改)
+- **删除任务**: `--date` / `--time`
+
+**示例**：
+```bash
+# 场景：有两个"去领快递"，分别在 15:00 和 16:00
+./reminder.sh complete --title "去领快递" --time "15:00"  # 只完成 15:00 那个
+```
+
+### 3. 重名碰撞检测与覆盖删除
+更新任务名称时自动检查冲突，防止意外覆盖：
+```bash
+./reminder.sh update --title "任务A" --name "任务B"
+# 如果"任务B"已存在，返回: {"status":"error","reason":"collision"...}
+
+# 使用 --force 强制覆盖：先删除所有同名的"任务B"，再将"任务A"改名为"任务B"
+./reminder.sh update --title "任务A" --name "任务B" --force
+```
+
+## �🏗️ 技术实现
 
 ### 技术栈
 *   **Shell (Bash)**：负责参数解析、逻辑控制和流程调度。
@@ -102,7 +162,10 @@
 3.  **系统权限**：首次运行需要授予终端控制提醒事项的权限。
 
 ## 🔮 未来扩展 (AI Agent 方向)
-- [ ] **语义化创建**：结合 LLM，只需输入“提醒我明天下午三点开会”，自动解析参数并调用 create。
+- [x] **🎉 多维度消歧**：支持通过标题+时间精准定位任务（已完成 v2.0）。
+- [x] **🎉 关键字搜索**：快速过滤任务列表，减少 Token 消耗（已完成 v2.0）。
+- [x] **🎉 重名检测**：自动拦截可能导致冲突的操作（已完成 v2.0）。
+- [ ] **语义化创建**：结合 LLM，只需输入"提醒我明天下午三点开会"，自动解析参数并调用 create。
 - [ ] **智能回顾**：每天早上自动汇总今日待办，并推送到终端或通知。
 - [ ] **上下文感知**：根据当前打开的项目自动建议提醒事项的标签或列表。
 
