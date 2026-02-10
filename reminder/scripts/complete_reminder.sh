@@ -8,6 +8,7 @@ check_jq
 
 # --- Defaults ---
 ID="" TITLE="" LIST=""
+DATE="" TIME=""
 
 # --- Parse Args ---
 while [ $# -gt 0 ]; do
@@ -15,6 +16,8 @@ while [ $# -gt 0 ]; do
         --id) ID="$2"; shift 2 ;;
         --title) TITLE="$2"; shift 2 ;;
         --list) LIST="$2"; shift 2 ;;
+        --date) DATE="$2"; shift 2 ;;
+        --time) TIME="$2"; shift 2 ;;
         *) json_error "complete" "未知选项: $1" ;;
     esac
 done
@@ -44,9 +47,12 @@ tell application "Reminders"
     set LF to character id 10
     set output to ""
     repeat with theList in listQueue
+        set listName to name of theList
         set matchedReminders to (every reminder of theList whose name is "$ES_TITLE")
         repeat with r in matchedReminders
-            set output to output & my reminderLine(r, name of theList) & LF
+            if my dateMatches(due date of r, "$DATE", "$TIME") or ("$DATE" is "" and "$TIME" is "") then
+                set output to output & my reminderLine(r, listName) & LF
+            end if
         end repeat
     end repeat
     return output
@@ -65,8 +71,8 @@ EOF
     fi
 
     if [ "$count" -eq 0 ]; then
-        jq -n --arg a "complete" --arg r "not_found_by_title" --arg t "$TITLE" --arg l "$LIST" \
-          '{status:"error",action:$a,reason:$r,title:$t,list:(if $l == "" then null else $l end),message:"No reminder found for title"}'
+        jq -n --arg a "complete" --arg r "not_found_by_title" --arg t "$TITLE" --arg l "$LIST" --arg d "$DATE" --arg ti "$TIME" \
+          '{status:"error",action:$a,reason:$r,title:$t,list:(if $l == "" then null else $l end),date:$d,time:$ti,message:"No reminder found matching title and criteria"}'
         exit 1
     elif [ "$count" -gt 1 ]; then
         candidates=$(echo "$lines" | reminder_lines_to_array)

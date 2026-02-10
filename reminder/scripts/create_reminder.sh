@@ -50,11 +50,6 @@ tell application "Reminders"
     end if
     
     tell list "$ES_LIST"
-        -- Deduplicate: delete existing reminders with the same title in this list
-        set dupes to (every reminder whose name is "$ES_NAME")
-        repeat with r in dupes
-            delete r
-        end repeat
 $DATE_BLOCK
         set newRem to make new reminder with properties $PROPERTIES
         

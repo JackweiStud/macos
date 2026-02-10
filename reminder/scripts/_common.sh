@@ -111,6 +111,27 @@ on cleanText(t)
     return t
 end cleanText
 
+on dateMatches(d, dateStr, timeStr)
+    if d is missing value then return false
+    set y to year of d as text
+    set m to (month of d as integer) as text
+    if (count of characters of m) < 2 then set m to "0" & m
+    set dy to day of d as text
+    if (count of characters of dy) < 2 then set dy to "0" & dy
+    set h to hours of d as text
+    if (count of characters of h) < 2 then set h to "0" & h
+    set mn to minutes of d as text
+    if (count of characters of mn) < 2 then set mn to "0" & mn
+    
+    set currentD to y & "-" & m & "-" & dy
+    set currentT to h & ":" & mn
+    
+    set matchDate to (dateStr is "" or dateStr is currentD)
+    set matchTime to (timeStr is "" or timeStr is currentT)
+    
+    return (matchDate and matchTime)
+end dateMatches
+
 on reminderLine(r, listName)
     tell application "Reminders"
         set rID to r's id

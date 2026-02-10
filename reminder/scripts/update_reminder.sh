@@ -9,17 +9,22 @@ check_jq
 # --- Defaults ---
 ID="" TITLE="" LIST=""
 NAME="" DATE="" TIME="" NOTES=""
+MATCH_DATE="" MATCH_TIME=""
+FORCE="false"
 
 # --- Parse Args ---
 while [ $# -gt 0 ]; do
     case "$1" in
-        --id)       ID="$2"; shift 2 ;;
-        --title)    TITLE="$2"; shift 2 ;;
-        --list)     LIST="$2"; shift 2 ;;
-        --name)     NAME="$2"; shift 2 ;;
-        --date)     DATE="$2"; shift 2 ;;
-        --time)     TIME="$2"; shift 2 ;;
-        --notes)    NOTES="$2"; shift 2 ;;
+        --id)           ID="$2"; shift 2 ;;
+        --title)        TITLE="$2"; shift 2 ;;
+        --list)         LIST="$2"; shift 2 ;;
+        --name)         NAME="$2"; shift 2 ;;
+        --date)         DATE="$2"; shift 2 ;;
+        --time)         TIME="$2"; shift 2 ;;
+        --notes)        NOTES="$2"; shift 2 ;;
+        --match-date)   MATCH_DATE="$2"; shift 2 ;;
+        --match-time)   MATCH_TIME="$2"; shift 2 ;;
+        --force)        FORCE="true"; shift ;;
         *) json_error "update" "未知选项: $1" ;;
     esac
 done
@@ -52,9 +57,12 @@ tell application "Reminders"
     set LF to character id 10
     set output to ""
     repeat with theList in listQueue
+        set listName to name of theList
         set matchedReminders to (every reminder of theList whose name is "$ES_TITLE")
         repeat with r in matchedReminders
-            set output to output & my reminderLine(r, name of theList) & LF
+            if my dateMatches(due date of r, "$MATCH_DATE", "$MATCH_TIME") or ("$MATCH_DATE" is "" and "$MATCH_TIME" is "") then
+                set output to output & my reminderLine(r, listName) & LF
+            end if
         end repeat
     end repeat
     return output
@@ -73,8 +81,8 @@ EOF
     fi
 
     if [ "$count" -eq 0 ]; then
-        jq -n --arg a "update" --arg r "not_found_by_title" --arg t "$TITLE" --arg l "$LIST" \
-          '{status:"error",action:$a,reason:$r,title:$t,list:(if $l == "" then null else $l end),message:"No reminder found for title"}'
+        jq -n --arg a "update" --arg r "not_found_by_title" --arg t "$TITLE" --arg l "$LIST" --arg md "$MATCH_DATE" --arg mt "$MATCH_TIME" \
+          '{status:"error",action:$a,reason:$r,title:$t,list:(if $l == "" then null else $l end),match_date:$md,match_time:$mt,message:"No reminder found matching title and criteria"}'
         exit 1
     elif [ "$count" -gt 1 ]; then
         candidates=$(echo "$lines" | reminder_lines_to_array)
@@ -84,6 +92,27 @@ EOF
     fi
 
     ID=$(echo "$lines" | head -n 1 | cut -f1)
+fi
+
+# --- Collision Check: If updating name, check if target name already exists ---
+if [ -n "$NAME" ] && [ "$FORCE" != "true" ]; then
+    collision_check=$(osascript 2>&1 << EOF
+tell application "Reminders"
+    if "$ID" is not "" then
+        set targetList to container of (first reminder whose id is "$ID")
+    else
+        set targetList to list "$ES_LIST"
+    end if
+    set collisions to (every reminder of targetList whose name is "$ES_NAME")
+    return count of collisions
+end tell
+EOF
+)
+    if [ "$collision_check" -gt 0 ]; then
+        jq -n --arg a "update" --arg n "$NAME" --arg l "$LIST" \
+          '{status:"error",action:$a,reason:"collision",name:$n,message:"目标名称已在该清单中存在。请使用不同的名称，或通过 --force 强制更新。"}'
+        exit 1
+    fi
 fi
 
 UPDATE_BLOCK=""
@@ -98,10 +127,6 @@ fi
 
 if [ -n "$DATE" ]; then
     validate_date "$DATE" || json_error "update" "无效日期格式: $DATE (预期 YYYY-MM-DD)"
-    # 如果没提供时间，我们需要保留原有时间或设为 09:00？
-    # 为了简单起见，如果只更新日期不提供时间，我们需要从 AppleScript 获取原有时间
-    # 但 AppleScript 脚本逻辑会比较复杂。
-    # 这里我们采用保守策略：如果提供了日期，必须提供时间，或者默认为 09:00
     [ -z "$TIME" ] && TIME="09:00"
     validate_time "$TIME" || json_error "update" "无效时间格式: $TIME (预期 HH:MM)"
     DATE_AS=$(build_date_as "newDate" "$DATE" "$TIME")

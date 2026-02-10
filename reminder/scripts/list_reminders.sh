@@ -7,13 +7,14 @@ source "$SCRIPT_DIR/_common.sh"
 check_jq
 
 # --- Defaults ---
-LIST="" COMPLETED="false" # Default to uncompleted, "true" or "all" to change
+LIST="" COMPLETED="false" SEARCH="" # Default to uncompleted, "true" or "all" to change
 
 # --- Parse Args ---
 while [ $# -gt 0 ]; do
     case "$1" in
         --list)      LIST="$2"; shift 2 ;;
         --completed) COMPLETED="$2"; shift 2 ;;
+        --search)    SEARCH="$2"; shift 2 ;;
         *) json_error "list" "Unknown option: $1" ;;
     esac
 done
@@ -25,12 +26,26 @@ if [ -n "$LIST" ]; then
     LIST_FILTER="set listQueue to {list \"$ES_LIST\"}"
 fi
 
-# Completed filter logic
-WHOSE_CLAUSE="every reminder"
+ES_SEARCH=$(escape_as "$SEARCH")
+
+# Whose clause logic
 if [ "$COMPLETED" = "true" ]; then
-    WHOSE_CLAUSE="every reminder whose completed is true"
+    COND="completed is true"
 elif [ "$COMPLETED" = "false" ]; then
-    WHOSE_CLAUSE="every reminder whose completed is false"
+    COND="completed is false"
+else
+    COND=""
+fi
+
+if [ -n "$SEARCH" ]; then
+    [ -n "$COND" ] && COND="$COND and "
+    COND="${COND}name contains \"$ES_SEARCH\""
+fi
+
+if [ -n "$COND" ]; then
+    WHOSE_CLAUSE="every reminder whose $COND"
+else
+    WHOSE_CLAUSE="every reminder"
 fi
 
 # --- Execute ---
