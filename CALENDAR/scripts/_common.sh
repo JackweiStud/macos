@@ -12,9 +12,19 @@ check_jq() {
 }
 
 # --- JSON Output ---
+clean_error() {
+    local err="$1"
+    # Remove "NNN:MMM: execution error: " prefix
+    err=$(echo "$err" | sed -E 's/^[0-9]+:[0-9]+: execution error: //')
+    # Remove " (-NNNN)" suffix
+    err=$(echo "$err" | sed -E 's/ \(-[0-9]+\)$//')
+    echo "$err"
+}
+
 json_error() {
     local action="$1" message="$2"
-    jq -n --arg a "$action" --arg m "$message" '{status:"error",action:$a,message:$m}'
+    local clean_msg=$(clean_error "$message")
+    jq -n --arg a "$action" --arg m "$clean_msg" '{status:"error",action:$a,message:$m}'
     exit 1
 }
 

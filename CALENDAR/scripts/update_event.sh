@@ -41,8 +41,8 @@ fi
 if [ -n "$NEW_DATE" ] || [ -n "$NEW_TIME" ]; then
     UPDATE_AS+=$'\n'"set origDuration to (end date of targetEvent) - (start date of targetEvent)"
     UPDATE_AS+=$'\n'"set eventDate to start date of targetEvent"
-    UPDATE_AS+=$'\n'"set day of eventDate to 1"
     if [ -n "$NEW_DATE" ]; then
+        UPDATE_AS+=$'\n'"set day of eventDate to 1"
         IFS='-' read -r Y M D <<< "$NEW_DATE"
         UPDATE_AS+=$'\n'"set month of eventDate to $((10#$M))"
         UPDATE_AS+=$'\n'"set year of eventDate to $Y"
@@ -54,12 +54,19 @@ if [ -n "$NEW_DATE" ] || [ -n "$NEW_TIME" ]; then
         UPDATE_AS+=$'\n'"set minutes of eventDate to $((10#$MIN))"
         UPDATE_AS+=$'\n'"set seconds of eventDate to 0"
     fi
-    UPDATE_AS+=$'\n'"set start date of targetEvent to eventDate"
     if [ -n "$NEW_DURATION" ]; then
-        UPDATE_AS+=$'\n'"set end date of targetEvent to eventDate + ($NEW_DURATION * 60)"
+        TARGET_END="eventDate + ($NEW_DURATION * 60)"
     else
-        UPDATE_AS+=$'\n'"set end date of targetEvent to eventDate + origDuration"
+        TARGET_END="eventDate + origDuration"
     fi
+
+    UPDATE_AS+=$'\n'"if eventDate >= (end date of targetEvent) then"
+    UPDATE_AS+=$'\n'"    set end date of targetEvent to $TARGET_END"
+    UPDATE_AS+=$'\n'"    set start date of targetEvent to eventDate"
+    UPDATE_AS+=$'\n'"else"
+    UPDATE_AS+=$'\n'"    set start date of targetEvent to eventDate"
+    UPDATE_AS+=$'\n'"    set end date of targetEvent to $TARGET_END"
+    UPDATE_AS+=$'\n'"end if"
 elif [ -n "$NEW_DURATION" ]; then
     UPDATE_AS+=$'\n'"set end date of targetEvent to (start date of targetEvent) + ($NEW_DURATION * 60)"
 fi
@@ -91,20 +98,26 @@ result=$(osascript 2>&1 << EOF
 $(applescript_helpers)
 tell application "Calendar"
     set targetUID to "$ES_UID"
-    set found to false
+    set targetEvent to missing value
+    set calName to ""
     repeat with cal in calendars
         try
             set matched to (every event of cal whose uid = targetUID)
             if (count of matched) > 0 then
                 set targetEvent to item 1 of matched
                 set calName to name of cal
-                set found to true
-$UPDATE_AS
-                return my eventLine(targetEvent, calName)
+                exit repeat
             end if
         end try
     end repeat
-    if not found then error "Event not found with UID: " & targetUID
+
+    if targetEvent is missing value then
+        error "Event not found with UID: " & targetUID
+    end if
+
+$UPDATE_AS
+
+    return my eventLine(targetEvent, calName)
 end tell
 EOF
 )
