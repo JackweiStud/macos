@@ -51,8 +51,9 @@ if [ -n "$DATE" ]; then
     validate_date "$DATE" || json_error "list" "Invalid date: $DATE"
     FROM="$DATE"; TO="$DATE"
 elif [ -z "$FROM" ] && [ -z "$TO" ]; then
-    # Default: today
-    FROM=$(date +%Y-%m-%d); TO="$FROM"
+    # Default: next 7 days
+    FROM=$(date +%Y-%m-%d)
+    TO=$(date -v+7d +%Y-%m-%d)
 fi
 [ -n "$FROM" ] && validate_date "$FROM" || json_error "list" "Invalid --from date: $FROM"
 [ -n "$TO" ] && validate_date "$TO" || json_error "list" "Invalid --to date: $TO"

@@ -34,6 +34,9 @@
 
 ### 3. 查询事件
 ```bash
+# 查询未来 7 天的所有事件（默认行为）
+./calendar.sh list
+
 # 查询特定日期的所有事件
 ./calendar.sh list --date 2026-02-20
 
