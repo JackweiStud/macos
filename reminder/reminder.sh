@@ -35,6 +35,18 @@ case "$ACTION" in
     list)
         bash "$BIN_DIR/list_reminders.sh" "$@"
         ;;
+    complete)
+        bash "$BIN_DIR/complete_reminder.sh" "$@"
+        ;;
+    delete)
+        bash "$BIN_DIR/delete_reminder.sh" "$@"
+        ;;
+    update)
+        bash "$BIN_DIR/update_reminder.sh" "$@"
+        ;;
+    cleanup)
+        bash "$BIN_DIR/cleanup_reminders.sh" "$@"
+        ;;
     lists)
         osascript << 'EOF' | jq -R 'split("\t")' | jq --arg a "lists" '{status:"success",action:$a,count:length,lists:.}'
         tell application "Reminders"
