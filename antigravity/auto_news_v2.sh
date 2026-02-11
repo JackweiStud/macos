@@ -19,7 +19,7 @@ TIMEOUT=180
 # 1. 准备 Prompt（写入临时文件，避免 shell 特殊字符问题）
 cat <<'PROMPT_EOF' > "$TEMP_PROMPT_FILE"
 【指令：请使用 Fast 模式/快速响应】
-请搜索过去 24 小时内全球最重要的 10 条 AI 行业新闻（优先抓取 Twitter/X, Hacker News, Reddit 上的热点）。
+请搜索过去 72 小时内全球最重要的 10 条 AI 项目或者技术相关的、热度最高的新闻、信息（优先 Twitter/X, Hacker News, Reddit 、github的热点信息）。
 
 要求：
 1. 输出语言必须是中文。

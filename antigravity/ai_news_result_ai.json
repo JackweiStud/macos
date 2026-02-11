@@ -1,0 +1,52 @@
+[
+  {
+    "title": "OpenAI 发布 GPT-5.3-Codex：史上最强编程 AI 智能体",
+    "summary": "2月5日，OpenAI 正式发布 GPT-5.3-Codex，被誉为其迄今最强大的智能编程系统。该模型速度比前代快25%，在 SWE-Bench Pro 和 Terminal-Bench 2.0 等基准测试中取得顶尖成绩，能够自主处理复杂多步骤开发任务。值得注意的是，该模型早期版本曾参与调试自身的训练和部署流程，且是首个被 OpenAI 归类为"高能力"网络安全模型的产品。",
+    "url": "https://openai.com"
+  },
+  {
+    "title": "Anthropic Claude Sonnet 5（代号 Fennec）泄露并疑似上线",
+    "summary": "多方消息显示，Anthropic 内部代号为"Fennec"的 Claude Sonnet 5 已于2月初悄然上线。该模型据称具备100万 token 上下文窗口，性能接近 Claude Opus 4.5 但成本低50%，在 SWE-Bench 上得分达82.1%。新增的"Dev Team"模式支持多智能体协作，并针对自主工作流进行了深度优化。",
+    "url": "https://latent.space"
+  },
+  {
+    "title": "Anthropic 发布 Claude Opus 4.6：聚焦智能体可靠性与自我纠错",
+    "summary": "2月5-6日，Anthropic 发布 Claude Opus 4.6，重点提升了"智能体可靠性"和"自我纠错"能力。该模型专为复杂的多步骤自主任务设计，标志着 AI 智能体从实验阶段走向企业级应用的关键一步。",
+    "url": "https://www.sdtimes.com"
+  },
+  {
+    "title": "Google Gemini 3 Flash 新增 Agentic Vision：视觉推理+代码执行",
+    "summary": "2月6日，Google 为 Gemini 3 Flash 添加了 Agentic Vision 功能，将视觉推理与代码执行深度结合。模型现在能以"思考→行动→观察"的循环方式处理视觉任务，进行精细检查并自动标注，大幅提升 AI 在视觉理解场景下的准确性和自主性。",
+    "url": "https://www.infoq.com"
+  },
+  {
+    "title": "Meta 内部最强模型"Avocado"代码痕迹曝光，即将公开发布",
+    "summary": "2月初，开发者在 Meta AI 平台代码中发现了"Avocado"和"Avocado Thinking"模型的痕迹。这是 Meta 超级智能实验室开发的下一代基座模型，内部评估显示其在知识、视觉感知和多语言性能方面已超越领先开源基座模型，预计2026年Q1公开发布。此举标志着 Meta 从开源路线向闭源竞争的战略转向。",
+    "url": "https://www.gadgets360.com"
+  },
+  {
+    "title": "OpenAI Codex macOS 独立应用上线一周下载量破百万",
+    "summary": "2月2日，OpenAI 推出 macOS 版 Codex 独立应用，上线仅一周便突破百万下载量。该应用支持同时运行多个 AI 智能体，允许开发者并行处理多项编程任务，标志着 AI 编程工具从插件形态向独立产品形态的重要转变。",
+    "url": "https://www.eweek.com"
+  },
+  {
+    "title": "GitHub 推出 Agent HQ：同时集成 Anthropic Claude 和 OpenAI Codex 编程智能体",
+    "summary": "GitHub 宣布在其 Agent HQ AI 平台中同时集成 Anthropic Claude 和 OpenAI Codex 编程智能体，为开发者提供多模型选择。这反映了 AI 编程领域从单一模型走向多智能体协作的生态趋势，开发者可根据不同任务场景灵活选择最适合的 AI 助手。",
+    "url": "https://www.infoworld.com"
+  },
+  {
+    "title": "xAI 与 SpaceX 达成合作：Grok 模型将嵌入航天器自主操控",
+    "summary": "Elon Musk 旗下的 xAI 宣布计划将其 Grok 模型嵌入 SpaceX 运营系统，用于加速自主航天器和火星机器人殖民地的研发。这是 AI 技术从数字世界走向太空物理世界的标志性事件，展示了大语言模型在极端环境自主控制中的应用前景。",
+    "url": "https://crescendo.ai"
+  },
+  {
+    "title": "第二份国际 AI 安全报告发布：全球最大规模 AI 安全协作",
+    "summary": "2月初发布的第二份国际 AI 安全报告被誉为迄今全球最大规模的 AI 安全协作成果，全面评估了通用 AI 的能力与风险。与此同时，欧盟 AI 巨型工厂监管法规和英国数据使用与访问法案于2月生效，AI 数据中心的能源消耗问题也成为全球关注焦点。",
+    "url": "https://insideglobaltech.com"
+  },
+  {
+    "title": "MCP（模型上下文协议）生态爆发：智能体开发工具和安全隐患并存",
+    "summary": "Anthropic 提出的模型上下文协议（MCP）正在成为 AI 智能体互操作的重要标准。GitHub 上 mcp-builder 等工具项目热度持续攀升，但 Hacker News 和 Reddit 上也出现关于 ClawHub 等技能市场中发现恶意 Skills 的安全讨论，凸显了 AI 智能体生态供应链安全的新挑战。",
+    "url": "https://github.com"
+  }
+]
