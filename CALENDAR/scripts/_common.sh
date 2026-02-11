@@ -35,7 +35,12 @@ json_success() {
 
 # --- Input Validation ---
 validate_date() {
-    [[ "$1" =~ ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$ ]]
+    local d="$1"
+    [[ "$d" =~ ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$ ]] || return 1
+    # Strict check: ensure the date actually exists (e.g., reject 2026-02-31)
+    local normalized
+    normalized=$(LC_ALL=C date -j -f "%Y-%m-%d" "$d" "+%Y-%m-%d" 2>/dev/null) || return 1
+    [[ "$normalized" == "$d" ]]
 }
 
 validate_time() {
