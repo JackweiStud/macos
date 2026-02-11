@@ -1,0 +1,52 @@
+[
+  {
+    "title": "Anthropic 发布 Opus 4.6，推出全新「Agent Teams」功能",
+    "summary": "Anthropic 发布了最新旗舰模型 Claude Opus 4.6，并引入了「Agent Teams（智能体团队）」新特性，可让多个 AI Agent 协同完成复杂任务。该功能标志着 AI Agent 从单体智能向团队协作方向迈出重要一步。",
+    "url": "https://techcrunch.com/2026/02/10/anthropic-releases-opus-4-6-with-new-agent-teams/"
+  },
+  {
+    "title": "OpenAI 与 Anthropic 同日发布新型 Agentic 编码模型，竞争白热化",
+    "summary": "OpenAI 在 Anthropic 发布新产品仅数分钟后，紧接着推出了自己的 Agentic 编码模型。两大 AI 巨头几乎同时发布竞品，展现了 AI 编程工具领域的激烈竞争态势。",
+    "url": "https://techcrunch.com/2026/02/10/openai-launches-new-agentic-coding-model-only-minutes-after-anthropic-drops-its-own/"
+  },
+  {
+    "title": "前 GitHub CEO 创办 AI 编码初创公司 Entire，种子轮融资 6000 万美元",
+    "summary": "前 GitHub CEO Thomas Dohmke 宣布创立新公司 Entire，专注于 AI Agent 主导的软件开发平台。公司已完成 6000 万美元种子轮融资，估值 3 亿美元。Dohmke 表示未来开发者将不再直接看代码，AI Agent 编写的代码量将远超人类审查能力，需要从根本上重新思考软件生产体系。",
+    "url": "https://www.axios.com/2026/02/10/former-github-ceo-ai-coding-startup"
+  },
+  {
+    "title": "xAI 近半数创始团队已离职，人才流失问题严峻",
+    "summary": "马斯克旗下 AI 公司 xAI 的 12 人创始团队中已有近半数（5 人）离开公司，其中 4 人是过去一年内离职的。此前基础设施负责人跳槽 OpenAI，谷歌资深工程师 Christian Szegedy 和前微软研究员 Greg Yang 也已先后离去，引发外界对 xAI 团队稳定性的担忧。",
+    "url": "https://techcrunch.com/2026/02/10/nearly-half-of-xais-founding-team-has-now-left-the-company/"
+  },
+  {
+    "title": "AI 视频生成公司 Runway 完成 3.15 亿美元融资，估值达 53 亿美元",
+    "summary": "AI 视频生成初创公司 Runway 宣布完成 3.15 亿美元新一轮融资，公司估值升至 53 亿美元。Runway 计划利用新资金大幅扩充约 140 人的团队，重点投入研究、工程和市场拓展，并着力开发更强大的世界模型。",
+    "url": "https://techcrunch.com/2026/02/10/ai-video-startup-runway-raises-315m-at-5-3b-valuation-eyes-more-capable-world-models/"
+  },
+  {
+    "title": "OpenAI 政策高管因反对 ChatGPT「成人模式」据报遭解雇",
+    "summary": "《华尔街日报》报道，OpenAI 一名政策高管因反对 ChatGPT 即将推出的「成人模式」（Adult Mode）而被解雇。该模式计划在今年第一季度上线，将引入情色内容。该高管和公司内部其他人对该功能可能对用户造成的影响表达了担忧。",
+    "url": "https://techcrunch.com/2026/02/10/openai-policy-exec-who-opposed-chatbots-adult-mode-reportedly-fired-on-discrimination-claim/"
+  },
+  {
+    "title": "Sam Altman 对 Claude 超级碗广告表现出强烈不满",
+    "summary": "OpenAI CEO Sam Altman 对 Anthropic 在超级碗期间投放的 Claude 广告反应激烈，公开表达了不满情绪。此事件反映出 AI 行业两大巨头之间竞争关系的持续升温，以及 AI 产品营销大战正式进入主流媒体战场。",
+    "url": "https://techcrunch.com/2026/02/10/sam-altman-got-exceptionally-testy-over-claude-super-bowl-ads/"
+  },
+  {
+    "title": "YouTube 为 Premium 用户推出 AI 播放列表生成器",
+    "summary": "YouTube 面向 Premium 用户推出 AI 播放列表生成器功能，用户可通过自然语言描述自动生成个性化播放列表。Google 透露目前 Google One 和 YouTube Premium 的付费用户总数已达 3.25 亿。",
+    "url": "https://techcrunch.com/2026/02/10/youtube-rolls-out-an-ai-playlist-generator-for-premium-users/"
+  },
+  {
+    "title": "OpenAI 新一轮融资在即，四只关联股票有望受益",
+    "summary": "DA Davidson 分析师表示 OpenAI 正就新一轮大规模融资进行谈判，预计将为 CoreWeave、Nvidia、Microsoft 和 Oracle 等关联股票带来正面催化效应。OpenAI 与 Oracle 合作的 Stargate 数据中心项目投资达 5000 亿美元，但公司尚未实现盈利，且面临 Google Gemini 追赶的竞争压力。",
+    "url": "https://www.businessinsider.com/ai-stock-picks-openai-nvidia-google-coreweave-microsoft-chatgpt-alphabet-2026-2"
+  },
+  {
+    "title": "丰田 Robotaxi 合作伙伴 Pony AI 启动自动驾驶 bZ4X 量产",
+    "summary": "丰田的 Robotaxi 合作伙伴小马智行（Pony AI）已开始生产搭载自动驾驶系统的丰田 bZ4X 电动车型，标志着自动驾驶出租车商业化迈出关键一步。同时，AI 视频虚拟形象技术也正在被应用于汽车经销商领域。",
+    "url": "https://www.autonews.com/toyota/ane-toyota-robotaxi-pony-ai-autonomous-0210/"
+  }
+]
