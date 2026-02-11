@@ -1,0 +1,52 @@
+[
+  {
+    "title": "科技巨头计划在2026年投入7000亿美元用于AI基础设施",
+    "summary": "亚马逊、谷歌、微软、Meta和甲骨文计划在2026年投入7000亿美元用于AI基础设施，主要用于建设数据中心和购买芯片，这一支出规模甚至超过了部分国家的GDP。",
+    "url": "https://www.ynetnews.com/tech-and-digital/article/hkrjykpvwe"
+  },
+  {
+    "title": "德国AI机器人公司筹集1亿美元进军美国市场",
+    "summary": "路透社报道显示，一家德国AI机器人公司成功筹集了1亿美元资金，旨在扩大其在美国市场的业务增长。",
+    "url": "https://www.reuters.com/video/watch/idRW403209022026RP1"
+  },
+  {
+    "title": "欧盟威胁阻止Meta在WhatsApp上屏蔽AI竞争对手",
+    "summary": "欧盟竞争监管机构警告Meta，在调查其涉嫌滥用市场主导地位期间，必须停止在WhatsApp上屏蔽竞争对手的AI服务。",
+    "url": "https://www.reuters.com/video/watch/idRW398209022026RP1/"
+  },
+  {
+    "title": "知名AI会计平台Botkeeper宣布关闭",
+    "summary": "AI自动化会计平台Botkeeper宣布关闭，其创始人表示尽管产品技术获得成功，但未能抵御宏观经济的快速变化。",
+    "url": "https://www.accountingtoday.com/news/botkeeper-shuts-down"
+  },
+  {
+    "title": "18%的超级碗广告采用AI主题或元素",
+    "summary": "数据显示，今年的超级碗广告中有18%包含AI相关信息，但这批广告的创意效果评分平均为2.7星，低于去年的平均水平。",
+    "url": "https://www.mediapost.com/publications/article/412670/two-super-bowl-ads-from-nfl-tops-in-creative-effec.html"
+  },
+  {
+    "title": "“AI教父”缩短AI可能导致人类灭绝的预测时间",
+    "summary": "在Reddit技术社区的热门讨论中，“AI教父”杰弗里·辛顿（Geoffrey Hinton）再次发出警告，缩短了关于AI技术在未来30年内可能导致人类灭绝的预测几率。",
+    "url": "https://www.reddit.com/r/technology/comments/1r0ida0/godfather_of_ai_shortens_odds_of_the_technology/"
+  },
+  {
+    "title": "AI进入手术室引发医疗安全与伦理担忧",
+    "summary": "Hacker News上的热门讨论关注AI辅助技术在手术室的应用，指出相关医疗事故报告的出现引发了对AI医疗安全性的质疑。",
+    "url": "https://news.ycombinator.com/item?id=46944753"
+  },
+  {
+    "title": "俄罗斯首个AI机器人首秀发生意外摔倒",
+    "summary": "据相关新闻报道，俄罗斯首个AI机器人在首次公开登台亮相时发生意外，面部朝下摔倒在舞台上，引发关注。",
+    "url": "https://www.reuters.com/video/watch/idRW403209022026RP1"
+  },
+  {
+    "title": "微软推出针对独立代理商的AI广告优化工具",
+    "summary": "微软广告发布新功能，利用AI协助独立广告代理商进行跨渠道创意优化和投放，旨在提升中小型机构的竞争力。",
+    "url": "https://www.thedrum.com/news/the-independent-agency-boom-setting-the-pace-in-the-era-of-ai"
+  },
+  {
+    "title": "AI环境危害问题引发社区持续热议",
+    "summary": "Reddit上的aiwars社区重启了关于AI对环境影响的讨论，重点关注AI模型训练和运行带来的巨大能源消耗。",
+    "url": "https://www.reddit.com/r/aiwars/comments/1r01ixq/ai_is_an_environmental_hazard/"
+  }
+]
