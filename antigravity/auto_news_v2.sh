@@ -165,11 +165,12 @@ CURRENT_WIN_COUNT=$(osascript -e '
 ' 2>/dev/null || echo "0")
 
 if [ "$CURRENT_WIN_COUNT" -gt "$BEFORE_WIN_COUNT" ]; then
+    # Cmd+Shift+W 关闭整个窗口（Cmd+W 只关闭标签页）
     osascript <<'APPLESCRIPT'
 tell application "Antigravity" to activate
 delay 0.3
 tell application "System Events"
-    keystroke "w" using {command down}
+    keystroke "w" using {command down, shift down}
 end tell
 APPLESCRIPT
 
